@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+        <a href="about.html">About</a>
+        <a href="logout.html">Logout</a>
+    </div>
+
+    <div class="content">
+        <h2>User Profile</h2>
+        <p><strong>Name:</strong> <span id="user-name"></span></p>
+<p><strong>Email:</strong> <span id="user-email"></span></p>
+
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+        
+            if (!token) {
+                alert("User not logged in.");
+                window.location.href = "login.html";
+                return;
+            }
+        
+            try {
+                const response = await fetch("http://localhost:4000/api/profile", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+        
+                const data = await response.json();
+        
+                if (response.ok) {
+                    document.getElementById("user-name").textContent = data.name;
+                    document.getElementById("user-email").textContent = data.email;
+                    
+                } else {
+                    alert(data.message || "Failed to fetch user profile");
+                }
+        
+            } catch (error) {
+                console.error(error);
+                alert("Server error");
+            }
+        });
+        </script>
+        
+      
+</body>
+</html>

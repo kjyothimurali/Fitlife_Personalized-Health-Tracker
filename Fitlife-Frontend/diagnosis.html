@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Risk Assessment Tool</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        /* Navigation Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background-color: #eaecef;
+            color: #4a5568;
+        }
+
+        .btn-prev:hover {
+            background-color: #d5d9e0;
+        }
+
+        .btn-next, .btn-submit {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-submit {
+            display: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #eaecef;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        /* Results Section */
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            display: none;
+        }
+
+        .risk-level {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .low-risk {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .medium-risk {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .high-risk {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .recommendation {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+
+        .recommendation h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-container, .results-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 10px 18px;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 14px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Health Risk Assessment</h1>
+            <p class="subtitle">Complete this form to receive a personalized health risk analysis</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p class="progress-text" id="progressText">Section 1 of 5</p>
+
+        <div class="form-container">
+            <form id="healthForm">
+                <!-- Personal Information -->
+                <div class="form-section active" id="section1">
+                    <h2>Personal Information</h2>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="18" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" min="100" max="250" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" min="30" max="300" required>
+                    </div>
+                </div>
+
+                <!-- Lifestyle Factors -->
+                <div class="form-section" id="section2">
+                    <h2>Lifestyle Factors</h2>
+                    <div class="form-group">
+                        <label>Do you smoke?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="smoking" value="never" required> Never smoked
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="smoking" value="former"> Former smoker
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="smoking" value="current"> Current smoker
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Alcohol consumption</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="alcohol" value="none" required> Never
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="alcohol" value="light"> Light (1-7 drinks/week)
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="alcohol" value="moderate"> Moderate (8-14 drinks/week)
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="alcohol" value="heavy"> Heavy (15+ drinks/week)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exercise">How often do you exercise?</label>
+                        <select id="exercise" name="exercise" required>
+                            <option value="">Select frequency</option>
+                            <option value="none">Never</option>
+                            <option value="rarely">Rarely (less than once a week)</option>
+                            <option value="moderate">1-3 times per week</option>
+                            <option value="frequent">4-6 times per week</option>
+                            <option value="daily">Daily or almost daily</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sleep">Average hours of sleep per night</label>
+                        <input type="number" id="sleep" name="sleep" min="0" max="16" step="0.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stress">How would you rate your stress level?</label>
+                        <select id="stress" name="stress" required>
+                            <option value="">Select stress level</option>
+                            <option value="1">Very low</option>
+                            <option value="2">Low</option>
+                            <option value="3">Moderate</option>
+                            <option value="4">High</option>
+                            <option value="5">Very high</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="form-section" id="section3">
+                    <h2>Medical History</h2>
+                    <div class="form-group">
+                        <label>Family history of chronic diseases</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="family_history" value="diabetes"> Diabetes
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="family_history" value="heart_disease"> Heart disease
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="family_history" value="high_blood_pressure"> High blood pressure
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="family_history" value="cancer"> Cancer
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="family_history" value="stroke"> Stroke
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Do you have any of the following conditions?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="conditions" value="diabetes"> Diabetes
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="conditions" value="hypertension"> High blood pressure
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="conditions" value="high_cholesterol"> High cholesterol
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="conditions" value="asthma"> Asthma
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="conditions" value="arthritis"> Arthritis
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="medications">Current medications (list all)</label>
+                        <textarea id="medications" name="medications" rows="3" placeholder="List medications separated by commas"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="allergies">Allergies</label>
+                        <textarea id="allergies" name="allergies" rows="2" placeholder="List any allergies you have"></textarea>
+                    </div>
+                </div>
+
+                <!-- Current Symptoms -->
+                <div class="form-section" id="section4">
+                    <h2>Current Symptoms</h2>
+                    <div class="form-group">
+                        <label>Have you experienced any of these in the past month?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="fatigue"> Persistent fatigue
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="headache"> Frequent headaches
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="chest_pain"> Chest pain
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="shortness_breath"> Shortness of breath
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="dizziness"> Dizziness
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="joint_pain"> Joint pain
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="abdominal_pain"> Abdominal pain
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="symptoms" value="unexplained_weight"> Unexplained weight change
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other_symptoms">Other symptoms not listed above</label>
+                        <textarea id="other_symptoms" name="other_symptoms" rows="3" placeholder="Describe any other symptoms you're experiencing"></textarea>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section" id="section5">
+                    <h2>Additional Information</h2>
+                    <div class="form-group">
+                        <label for="diet">How would you describe your typical diet?</label>
+                        <select id="diet" name="diet" required>
+                            <option value="">Select diet type</option>
+                            <option value="balanced">Balanced diet</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="low_carb">Low-carb/high-protein</option>
+                            <option value="high_carb">High-carb/low-fat</option>
+                            <option value="junk_food">Mostly processed/junk food</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="water">Daily water intake (glasses)</label>
+                        <input type="number" id="water" name="water" min="0" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Do you have regular health check-ups?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="checkups" value="yes" required> Yes, annually
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="checkups" value="sometimes"> Sometimes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="checkups" value="no"> No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="health_goals">What are your primary health goals?</label>
+                        <textarea id="health_goals" name="health_goals" rows="3" placeholder="E.g., lose weight, manage stress, improve fitness"></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="button" class="btn btn-prev" id="prevBtn">Previous</button>
+                    <button type="button" class="btn btn-next" id="nextBtn">Next</button>
+                    <button type="submit" class="btn btn-submit" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container" id="resultsContainer">
+            <h2>Your Health Risk Assessment</h2>
+            <div id="riskResults"></div>
+            <div class="recommendation">
+                <h3>Recommendations</h3>
+                <div id="recommendations"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form navigation
+            const formSections = document.querySelectorAll('.form-section');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const form = document.getElementById('healthForm');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            let currentSection = 0;
+            const totalSections = formSections.length;
+            
+            // Update progress bar
+            function updateProgress() {
+                const progress = ((currentSection + 1) / totalSections) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Section ${currentSection + 1} of ${totalSections}`;
+                
+                // Show/hide buttons
+                prevBtn.style.display = currentSection === 0 ? 'none' : 'block';
+                nextBtn.style.display = currentSection === totalSections - 1 ? 'none' : 'block';
+                submitBtn.style.display = currentSection === totalSections - 1 ? 'block' : 'none';
+            }
+            
+            // Next button click
+            nextBtn.addEventListener('click', function() {
+                // Validate current section before proceeding
+                const currentSectionFields = formSections[currentSection].querySelectorAll('[required]');
+                let isValid = true;
+                
+                currentSectionFields.forEach(field => {
+                    if (!field.value) {
+                        field.style.borderColor = '#e74c3c';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+                
+                if (isValid) {
+                    formSections[currentSection].classList.remove('active');
+                    currentSection++;
+                    formSections[currentSection].classList.add('active');
+                    updateProgress();
+                } else {
+                    alert('Please fill in all required fields before proceeding.');
+                }
+            });
+            
+            // Previous button click
+            prevBtn.addEventListener('click', function() {
+                formSections[currentSection].classList.remove('active');
+                currentSection--;
+                formSections[currentSection].classList.add('active');
+                updateProgress();
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect all form data
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => {
+                    // Handle checkboxes and radio buttons
+                    if (data[key]) {
+                        if (!Array.isArray(data[key])) {
+                            data[key] = [data[key]];
+                        }
+                        data[key].push(value);
+                    } else {
+                        data[key] = value;
+                    }
+                });
+                // Send data to backend
+                fetch('http://localhost:4000/api/save-health-data', {
+                    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Failed to save health data');
+    }
+    return response.json();
+})
+.then(result => {
+    console.log('Health data saved:', result);
+})
+.catch(error => {
+    console.error('Error saving health data:', error);
+});
+
+                // Process the data and show results
+                analyzeHealthData(data);
+                
+                // Hide form and show results
+                document.querySelector('.form-container').style.display = 'none';
+                resultsContainer.style.display = 'block';
+                
+                // Scroll to results
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Initial progress update
+            updateProgress();
+            
+            // Health data analysis function
+            function analyzeHealthData(data) {
+                // Calculate BMI
+                const heightInMeters = data.height / 100;
+                const bmi = data.weight / (heightInMeters * heightInMeters);
+                
+                // Initialize risk scores
+                let diabetesRisk = 0;
+                let heartDiseaseRisk = 0;
+                let hypertensionRisk = 0;
+                
+                // Age factors
+                if (data.age >= 45) {
+                    diabetesRisk += 20;
+                    heartDiseaseRisk += 15;
+                    hypertensionRisk += 10;
+                }
+                
+                // BMI factors
+                if (bmi >= 30) {
+                    diabetesRisk += 25;
+                    heartDiseaseRisk += 20;
+                    hypertensionRisk += 15;
+                } else if (bmi >= 25) {
+                    diabetesRisk += 15;
+                    heartDiseaseRisk += 10;
+                    hypertensionRisk += 8;
+                }
+                
+                // Smoking factors
+                if (data.smoking === 'current') {
+                    diabetesRisk += 10;
+                    heartDiseaseRisk += 25;
+                    hypertensionRisk += 15;
+                } else if (data.smoking === 'former') {
+                    heartDiseaseRisk += 10;
+                }
+                
+                // Exercise factors
+                if (data.exercise === 'none' || data.exercise === 'rarely') {
+                    diabetesRisk += 15;
+                    heartDiseaseRisk += 15;
+                    hypertensionRisk += 10;
+                }
+                
+                // Family history factors
+                if (Array.isArray(data.family_history)) {
+                    if (data.family_history.includes('diabetes')) diabetesRisk += 20;
+                    if (data.family_history.includes('heart_disease')) heartDiseaseRisk += 20;
+                    if (data.family_history.includes('high_blood_pressure')) hypertensionRisk += 20;
+                }
+                
+                // Existing conditions
+                if (Array.isArray(data.conditions)) {
+                    if (data.conditions.includes('high_cholesterol')) {
+                        heartDiseaseRisk += 20;
+                        hypertensionRisk += 10;
+                    }
+                }
+                
+                // Symptoms analysis
+                if (Array.isArray(data.symptoms)) {
+                    if (data.symptoms.includes('chest_pain') || data.symptoms.includes('shortness_breath')) {
+                        heartDiseaseRisk += 15;
+                    }
+                    if (data.symptoms.includes('fatigue') && data.symptoms.includes('unexplained_weight')) {
+                        diabetesRisk += 10;
+                    }
+                }
+                
+                // Stress factors
+                if (parseInt(data.stress) >= 4) {
+                    heartDiseaseRisk += 10;
+                    hypertensionRisk += 15;
+                }
+                
+                // Cap all risks at 100%
+                diabetesRisk = Math.min(diabetesRisk, 100);
+                heartDiseaseRisk = Math.min(heartDiseaseRisk, 100);
+                hypertensionRisk = Math.min(hypertensionRisk, 100);
+                
+                // Generate results HTML
+                let resultsHTML = `
+                    <div class="form-group">
+                        <h3>Your BMI: ${bmi.toFixed(1)}</h3>
+                        <p>${getBmiCategory(bmi)}</p>
+                    </div>
+                `;
+                
+                // Add risk assessments
+                resultsHTML += generateRiskCard('Diabetes', diabetesRisk);
+                resultsHTML += generateRiskCard('Heart Disease', heartDiseaseRisk);
+                resultsHTML += generateRiskCard('Hypertension', hypertensionRisk);
+                
+                // Add recommendations
+                let recommendationsHTML = '';
+                
+                // General recommendations
+                if (bmi >= 25) {
+                    recommendationsHTML += `<p>• Consider weight management strategies as your BMI indicates ${bmi >= 30 ? 'obesity' : 'overweight'}</p>`;
+                }
+                
+                if (data.exercise === 'none' || data.exercise === 'rarely') {
+                    recommendationsHTML += `<p>• Increase physical activity to at least 150 minutes of moderate exercise per week</p>`;
+                }
+                
+                if (data.smoking === 'current') {
+                    recommendationsHTML += `<p>• Quit smoking to significantly reduce your health risks</p>`;
+                }
+                
+                if (parseInt(data.stress) >= 4) {
+                    recommendationsHTML += `<p>• Practice stress-reduction techniques like meditation or yoga</p>`;
+                }
+                
+                if (data.sleep < 6 || data.sleep > 9) {
+                    recommendationsHTML += `<p>• Aim for 7-9 hours of quality sleep each night</p>`;
+                }
+                
+                // Specific condition recommendations
+                if (diabetesRisk >= 50) {
+                    recommendationsHTML += `<p>• Monitor blood sugar levels and consider reducing sugar intake</p>`;
+                }
+                
+                if (heartDiseaseRisk >= 50) {
+                    recommendationsHTML += `<p>• Have your cholesterol levels checked regularly</p>`;
+                }
+                
+                if (hypertensionRisk >= 50) {
+                    recommendationsHTML += `<p>• Monitor your blood pressure regularly and reduce sodium intake</p>`;
+                }
+                
+                // Final disclaimer
+                recommendationsHTML += `
+                    <p><strong>Important:</strong> This assessment is not a substitute for professional medical advice. 
+                    Please consult with your healthcare provider for personalized guidance.</p>
+                `;
+                
+                // Display results
+                document.getElementById('riskResults').innerHTML = resultsHTML;
+                document.getElementById('recommendations').innerHTML = recommendationsHTML;
+            }
+            
+            // Helper function to generate risk cards
+            function generateRiskCard(condition, risk) {
+                let riskLevel = '';
+                let riskClass = '';
+                
+                if (risk < 30) {
+                    riskLevel = 'Low Risk';
+                    riskClass = 'low-risk';
+                } else if (risk < 60) {
+                    riskLevel = 'Moderate Risk';
+                    riskClass = 'medium-risk';
+                } else {
+                    riskLevel = 'High Risk';
+                    riskClass = 'high-risk';
+                }
+                
+                return `
+                    <div class="form-group">
+                        <h3>${condition} Risk</h3>
+                        <div class="risk-level ${riskClass}">
+                            ${riskLevel} (${Math.round(risk)}%)
+                        </div>
+                        <div class="progress-container" style="margin-top: 10px;">
+                            <div class="progress-bar" style="width: ${risk}%; background-color: ${getRiskColor(risk)};"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Helper function to get BMI category
+            function getBmiCategory(bmi) {
+                if (bmi < 18.5) return 'Underweight';
+                if (bmi < 25) return 'Normal weight';
+                if (bmi < 30) return 'Overweight';
+                return 'Obese';
+            }
+            
+            // Helper function to get risk color
+            function getRiskColor(risk) {
+                if (risk < 30) return '#28a745';
+                if (risk < 60) return '#ffc107';
+                return '#dc3545';
+            }
+        });
+    </script>
+</body>
+</html>

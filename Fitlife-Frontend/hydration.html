@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hydration Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #e3f2fd;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .progress-container {
+      width: 100%;
+      background: #ddd;
+      border-radius: 20px;
+      margin-top: 20px;
+    }
+    .progress {
+      width: 0%;
+      height: 20px;
+      background: #2196F3;
+      border-radius: 20px;
+      transition: width 0.3s;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      background: #2196F3;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #1976D2;
+    }
+    input {
+      width: 80px;
+      padding: 5px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .chart-container {
+      margin-top: 20px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Hydration Tracker</h2>
+    <p>Goal: <span id="goal">2000</span> ml</p>
+    <input type="number" id="goal-input" placeholder="Set goal" min="500" step="100" />
+    <button onclick="setGoal()">Set Goal</button>
+    <p>Consumed: <span id="consumed">0</span> ml</p>
+    <input type="number" id="water-input" placeholder="Add water" min="50" step="50" />
+    <button onclick="addCustomWater()">Add</button>
+
+    <div class="progress-container">
+      <div class="progress" id="progress-bar"></div>
+    </div>
+
+    <div class="buttons">
+      <button onclick="addWater(250)">+250ml</button>
+      <button onclick="addWater(500)">+500ml</button>
+      <button onclick="resetWater()">Reset</button>
+    </div>
+
+    <div class="chart-container">
+      <h3>Last 7 Days Consumption</h3>
+      <canvas id="waterChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let goal = 2000;
+    let consumed = 0;
+    let user_id = localStorage.getItem("user_id") || "4";
+    let waterChart;
+
+    if (!user_id) {
+      alert("User not logged in. Please log in to continue.");
+    }
+
+    function setGoal() {
+      const input = parseInt(document.getElementById("goal-input").value);
+      if (input && input >= 500) {
+        goal = input;
+        document.getElementById("goal").innerText = goal;
+        updateProgress();
+      }
+    }
+
+    function updateProgress() {
+      const progress = Math.min((consumed / goal) * 100, 100);
+      document.getElementById("progress-bar").style.width = progress + "%";
+      document.getElementById("consumed").innerText = consumed;
+    }
+
+    function addWater(amount) {
+      const today = new Date().toISOString().split("T")[0];
+      const user_id = parseInt(localStorage.getItem("user_id") || "4");
+
+      if (!user_id || isNaN(user_id)) {
+        console.error("❌ Invalid user_id. Cannot log water.");
+        alert("User ID is missing or invalid. Please log in again.");
+        return;
+      }
+
+      consumed += amount;
+      updateProgress();
+
+      fetch("http://localhost:4000/api/water-intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id, water_ml: amount, date: today }),
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("✅ Logged:", data);
+        fetchWaterData();
+      })
+      .catch((err) => console.error("Error logging water:", err));
+    }
+
+    function addCustomWater() {
+      const val = parseInt(document.getElementById("water-input").value);
+      if (val && val > 0) {
+        addWater(val);
+        document.getElementById("water-input").value = "";
+      }
+    }
+
+    function resetWater() {
+      consumed = 0;
+      updateProgress();
+    }
+
+    async function fetchWaterData() {
+      console.log("Fetching data for user:", user_id);
+
+      if (!user_id) {
+        console.error("user_id is undefined.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:4000/api/water-intake/${user_id}`);
+        const data = await response.json();
+        console.log("Fetched water data:", data);
+        updateChart(data);
+      } catch (error) {
+        console.error("Error fetching water data:", error);
+      }
+    }
+
+    function updateChart(data) {
+      const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-US", { month: "short", day: "numeric" }); // "Apr 6"
+      };
+
+      const dates = data.map(entry => formatDate(entry.date));
+      const waterAmounts = data.map(entry => entry.total_water);
+
+      console.log("📅 Dates:", dates);
+      console.log("💧 Water amounts:", waterAmounts);
+
+      const ctx = document.getElementById("waterChart").getContext("2d");
+
+      if (waterChart) {
+        waterChart.destroy();
+      }
+
+      waterChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: dates,
+          datasets: [{
+            label: "Water Consumed (ml)",
+            data: waterAmounts,
+            backgroundColor: "#2196F3",
+            borderRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "ml"
+              }
+            }
+          }
+        }
+      });
+    }
+
+    window.onload = () => {
+      fetchWaterData();
+    };
+  </script>
+</body>
+</html>

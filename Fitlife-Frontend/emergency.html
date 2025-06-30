@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Response Guide</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f7f7;
+            color: #3f3f3f;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #dbe2ef 0%, #f9f7f7 100%);
+            color: #112d4e;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(143, 168, 191, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #4a6fa5;
+        }
+
+        /* Emergency Numbers Banner */
+        .emergency-banner {
+            background: linear-gradient(to right, #ff9a9e 0%, #fad0c4 100%);
+            color: #5c2c2c;
+            padding: 18px;
+            text-align: center;
+            font-weight: bold;
+            margin: 40px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 154, 158, 0.2);
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Emergency Card Styles */
+        .emergency-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(219, 226, 239, 0.8);
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .card-body h3 {
+            color: #3f72af;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-body ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card-body li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 850px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.4s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #3f72af;
+        }
+
+        .modal-header {
+            padding: 20px;
+            margin: -40px -40px 30px -40px;
+            border-radius: 12px 12px 0 0;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin: 40px 0;
+            position: relative;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 15px 25px;
+            border: 2px solid #dbe2ef;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        #search-input:focus {
+            border-color: #3f72af;
+            box-shadow: 0 5px 20px rgba(63, 114, 175, 0.1);
+        }
+
+        #search-input::placeholder {
+            color: #aaa;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #dbe2ef;
+            color: #3f3f3f;
+            text-align: center;
+            padding: 30px;
+            margin-top: 70px;
+            border-top: 1px solid rgba(143, 168, 191, 0.3);
+        }
+
+        footer p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .modal-content {
+                width: 90%;
+                padding: 30px;
+                margin: 10% auto;
+            }
+
+            .modal-header {
+                margin: -30px -30px 20px -30px;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        /* Additional Emergency Colors */
+        .choking { background: linear-gradient(135deg, #ff9a9e 0%, #fbc2eb 100%); }
+        .cardiac { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); }
+        .burn { background: linear-gradient(135deg, #ffb347 0%, #ffcc33 100%); }
+        .bleeding { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); }
+        .poison { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .stroke { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .seizure { background: linear-gradient(135deg, #868f96 0%, #596164 100%); }
+        .allergy { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+
+        /* Additional Styles */
+        .warning {
+            background-color: #fff8e6;
+            padding: 20px;
+            border-left: 5px solid #ffc107;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning h4 {
+            color: #8a6d3b;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .warning p {
+            color: #8a6d3b;
+            line-height: 1.6;
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            margin: 30px auto;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3f72af;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Emergency Response Guide</h1>
+            <p>Essential first aid information to help you respond effectively in life-threatening situations</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="emergency-banner pulse">
+            <p>🚑 In case of emergency, call your local emergency number immediately (108,100) 🚑</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search emergency situations (e.g., 'choking', 'heart attack')...">
+        </div>
+
+        <div class="main-grid" id="emergency-grid">
+            <!-- Cards will be populated by JavaScript -->
+        </div>
+
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <!-- Modal for detailed emergency info -->
+    <div id="emergency-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header" id="modal-header">
+                <h2 id="modal-title">Emergency Title</h2>
+            </div>
+            <div id="modal-body">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Emergency Response Guide © 2023</p>
+            <p>This information is for educational purposes only and not a substitute for professional medical advice, diagnosis, or treatment.</p>
+            <p class="disclaimer">Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition or emergency procedures. Never disregard professional medical advice or delay in seeking it because of something you have read on this website.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Emergency situations data
+        const emergencies = [
+            {
+                id: 'choking',
+                title: 'Choking (Adult/Child)',
+                steps: [
+                    'Assess the situation quickly. Ask "Are you choking?" If they can cough or speak, encourage them to keep coughing.',
+                    'If they cannot breathe, speak, or cough (severe choking), stand behind them and prepare to perform abdominal thrusts.',
+                    'Make a fist with one hand and place the thumb side against the middle of their abdomen, just above the navel.',
+                    'Grasp your fist with your other hand and give quick, upward thrusts into their abdomen.',
+                    'Continue abdominal thrusts until the object is expelled or the person becomes unconscious.',
+                    'If the person becomes unconscious, lower them to the ground and begin CPR (starting with chest compressions).',
+                    'For pregnant or obese individuals, perform chest thrusts instead of abdominal thrusts.'
+                ],
+                video: 'https://www.youtube.com/embed/7CgtIgSyAiU',
+                warning: 'Never perform abdominal thrusts on infants under 1 year old. For infants, use back blows followed by chest thrusts.',
+                colorClass: 'choking'
+            },
+            {
+                id: 'cardiac-arrest',
+                title: 'Cardiac Arrest (CPR)',
+                steps: [
+                    'Check for responsiveness - tap shoulders and shout "Are you okay?"',
+                    'If unresponsive, shout for help and call emergency services immediately.',
+                    'Check for breathing - look for chest movement, listen for breath, feel for air (take no more than 10 seconds).',
+                    'If not breathing normally, begin CPR: Place heel of one hand on center of chest, other hand on top.',
+                    'Push hard and fast - at least 2 inches deep at 100-120 compressions per minute ("Stayin\' Alive" rhythm).',
+                    'After 30 compressions, give 2 rescue breaths (if trained): Tilt head, pinch nose, seal mouth, blow for 1 second.',
+                    'Continue cycles of 30 compressions to 2 breaths until help arrives or person shows signs of life.',
+                    'If AED is available, turn it on and follow voice prompts immediately.'
+                ],
+                video: 'https://www.youtube.com/embed/-NodDRTsV88',
+                warning: 'Don\'t stop CPR except to use an AED or if scene becomes unsafe. Even imperfect CPR is better than no CPR.',
+                colorClass: 'cardiac'
+            },
+            {
+                id: 'severe-bleeding',
+                title: 'Severe Bleeding',
+                steps: [
+                    'Call emergency services immediately for serious bleeding (spurting blood, pooling blood, or soaked clothing).',
+                    'Wear gloves if available to protect from bloodborne pathogens.',
+                    'Have the injured person lie down and elevate the injured part if possible.',
+                    'Apply direct pressure to the wound with a clean cloth or bandage (use your hand if nothing else available).',
+                    'Maintain steady pressure - don\'t peek to check as this may disrupt clotting.',
+                    'If blood soaks through, add more material on top - don\'t remove original dressing.',
+                    'For life-threatening limb bleeding when direct pressure fails, apply tourniquet 2-3 inches above wound.',
+                    'Write down the time tourniquet was applied and give this information to EMS.',
+                    'Monitor for signs of shock (pale skin, rapid pulse, shallow breathing) and keep person warm.'
+                ],
+                video: 'https://www.youtube.com/embed/NxO5LvgqZe0',
+                warning: 'Do not remove embedded objects - stabilize with bulky dressing around object. Never use a tourniquet on neck or torso.',
+                colorClass: 'bleeding'
+            },
+            {
+                id: 'burns',
+                title: 'Burns',
+                steps: [
+                    'Stop the burning process: Remove person from heat source, smother flames, or rinse chemical burns.',
+                    'Cool thermal burns with cool (not cold) running water for 10-15 minutes (avoid ice).',
+                    'Remove jewelry and tight clothing before swelling starts (don\'t remove stuck clothing).',
+                    'Cover burn loosely with sterile non-stick dressing or clean cloth (plastic wrap works well).',
+                    'Do not apply ointments, butter, or home remedies to serious burns.',
+                    'For chemical burns: Flush with copious amounts of water for at least 20 minutes.',
+                    'For electrical burns: Ensure power is off before touching victim (may have invisible injuries).',
+                    'Seek immediate medical help for: burns larger than palm, burns on face/hands/feet/genitals, full-thickness burns.'
+                ],
+                video: 'https://www.youtube.com/embed/TLr2qsEhpC8?si=TuylXbreC7CM7GRQ',
+                warning: 'Never break blisters - they protect against infection. Don\'t use adhesive bandages on burns - they can stick to damaged skin.',
+                colorClass: 'burn'
+            },
+            {
+                id: 'stroke',
+                title: 'Stroke (FAST Assessment)',
+                steps: [
+                    'Use FAST to recognize stroke symptoms: Face drooping, Arm weakness, Speech difficulty, Time to call emergency.',
+                    'Ask person to smile - does one side of face droop?',
+                    'Ask person to raise both arms - does one arm drift downward?',
+                    'Ask person to repeat simple phrase - is speech slurred or strange?',
+                    'If any of these signs are present, call emergency services IMMEDIATELY (even if symptoms go away).',
+                    'Note time when symptoms first appeared (critical for treatment decisions).',
+                    'Keep person comfortable - have them sit or lie down with head slightly elevated.',
+                    'Do not give anything to eat or drink (swallowing may be impaired).',
+                    'If person loses consciousness, place in recovery position and monitor breathing.'
+                ],
+                video: 'https://www.youtube.com/embed/PhH9a0kIwmk?si=nXy9SJTw8FPudERs',
+                warning: 'Time lost is brain lost! Stroke treatments work best when given within first 3 hours. Don\'t wait to see if symptoms improve.',
+                colorClass: 'stroke'
+            },
+            {
+                id: 'poisoning',
+                title: 'Poisoning',
+                steps: [
+                    'Call poison control or emergency services immediately (have container available if possible).',
+                    'For swallowed poison: Do NOT induce vomiting unless specifically instructed.',
+                    'For skin exposure: Remove contaminated clothing and rinse skin with water for 15-20 minutes.',
+                    'For eye exposure: Rinse eye with lukewarm water for 15-20 minutes (pour from inner to outer corner).',
+                    'For inhaled poison: Get person to fresh air immediately (don\'t become victim yourself).',
+                    'If person is unconscious but breathing, place in recovery position.',
+                    'If not breathing, begin CPR (use barrier device if available).',
+                    'Save any containers, pills, or vomit to show medical personnel.'
+                ],
+                video: 'https://www.youtube.com/embed/rQrY-2J4OtY?si=HM4MOy1k5mVGVLIa',
+                warning: 'Never give anything by mouth unless specifically instructed. Don\'t follow old advice like giving milk or activated charcoal without professional guidance.',
+                colorClass: 'poison'
+            },
+            {
+                id: 'seizure',
+                title: 'Seizure',
+                steps: [
+                    'Stay calm and note time seizure starts (most last 1-3 minutes).',
+                    'Clear area of hard/sharp objects to prevent injury.',
+                    'Cushion head with something soft if possible (folded jacket).',
+                    'Do NOT restrain person or put anything in their mouth.',
+                    'Gently roll person onto side if possible to help breathing.',
+                    'Loosen tight clothing around neck (ties, collars).',
+                    'After seizure ends (postictal phase), stay with person as they recover.',
+                    'Call emergency services if: seizure lasts >5 minutes, breathing difficulty afterward, injury occurs, first seizure, or multiple seizures.',
+                    'Be reassuring and explain what happened when they regain awareness.'
+                ],
+                video: 'https://www.youtube.com/embed/Ovsw7tdneqE?si=oMKyzs8Pas0I9J6y',
+                warning: 'Never try to hold person down or stop movements. Don\'t attempt mouth-to-mouth during convulsions - wait until seizure ends to check breathing.',
+                colorClass: 'seizure'
+            },
+            {
+                id: 'allergic-reaction',
+                title: 'Severe Allergic Reaction (Anaphylaxis)',
+                steps: [
+                    'Recognize symptoms: difficulty breathing, swelling of face/throat, hives, rapid pulse, dizziness, nausea.',
+                    'Call emergency services immediately - anaphylaxis can be fatal within minutes.',
+                    'Ask "Do you have an epinephrine auto-injector?" and help them use it if needed.',
+                    'Help administer epinephrine into outer thigh (can give through clothing).',
+                    'Position person appropriately: sitting if breathing difficulty, lying with legs raised if dizzy.',
+                    'If no improvement in 5-15 minutes, second dose may be given if available.',
+                    'If person becomes unconscious, place in recovery position and monitor breathing.',
+                    'Be prepared to perform CPR if breathing stops.',
+                    'Even if symptoms improve, person MUST go to hospital (reaction may recur).'
+                ],
+                video: 'https://www.youtube.com/embed/zRSxAL-twdc?si=EOUStcDqLMz96ftP',
+                warning: 'Don\'t wait to see if symptoms improve - administer epinephrine immediately for suspected anaphylaxis. Antihistamines are NOT sufficient treatment for severe reactions.',
+                colorClass: 'allergy'
+            }
+        ];
+
+        // DOM elements
+        const emergencyGrid = document.getElementById('emergency-grid');
+        const modal = document.getElementById('emergency-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalHeader = document.getElementById('modal-header');
+        const modalBody = document.getElementById('modal-body');
+        const closeBtn = document.querySelector('.close-btn');
+        const searchInput = document.getElementById('search-input');
+        const loader = document.getElementById('loader');
+
+        // Populate emergency cards
+        function populateEmergencyCards(filteredData = null) {
+            emergencyGrid.innerHTML = '';
+            const dataToUse = filteredData || emergencies;
+            
+            if (dataToUse.length === 0) {
+                emergencyGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <h3 style="color: #3f72af; margin-bottom: 15px;">No emergencies found</h3>
+                        <p style="color: #666;">Try a different search term or browse all emergency situations</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            dataToUse.forEach(emergency => {
+                const card = document.createElement('div');
+                card.className = 'emergency-card';
+                card.dataset.id = emergency.id;
+                
+                card.innerHTML = `
+                    <div class="card-header ${emergency.colorClass}">
+                        ${emergency.title}
+                    </div>
+                    <div class="card-body">
+                        <h3>Key Steps:</h3>
+                        <ol>
+                            ${emergency.steps.slice(0, 3).map(step => `<li>${step}</li>`).join('')}
+                        </ol>
+                        <p style="margin-top: 15px; color: #3f72af; font-weight: 500;">Tap for complete instructions & video</p>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => openModal(emergency));
+                emergencyGrid.appendChild(card);
+            });
+        }
+
+        // Open modal with emergency details
+        function openModal(emergency) {
+            modalTitle.textContent = emergency.title;
+            modalHeader.className = `modal-header ${emergency.colorClass}`;
+            
+            // Show loader while video loads
+            modalBody.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div class="loader"></div>
+                    <p style="margin-top: 15px; color: #666;">Loading emergency information...</p>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                modalBody.innerHTML = `
+                    <h3 style="color: #3f72af; margin-bottom: 15px;">Step-by-Step Response:</h3>
+                    <ol style="margin-bottom: 25px;">
+                        ${emergency.steps.map((step, index) => `
+                            <li style="margin-bottom: 12px; padding-left: 5px;">
+                                <strong style="color: #112d4e;">Step ${index + 1}:</strong> ${step}
+                            </li>
+                        `).join('')}
+                    </ol>
+                    
+                    ${emergency.warning ? `
+                        <div class="warning">
+                            <h4>⚠️ Critical Safety Information</h4>
+                            <p>${emergency.warning}</p>
+                        </div>
+                    ` : ''}
+                    
+                    ${emergency.video ? `
+                        <h3 style="color: #3f72af; margin: 35px 0 15px;">Instructional Video Demonstration:</h3>
+                        <div class="video-container">
+                            <iframe width="560" height="315" src="${emergency.video}" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <p style="text-align: center; margin-top: 10px; color: #666; font-size: 0.9rem;">
+                            Video courtesy of YouTube. May take a moment to load.
+                        </p>
+                    ` : ''}
+                    
+                    <div style="margin-top: 30px; padding: 15px; background-color: #f0f4f9; border-radius: 8px;">
+                        <p style="color: #3f72af; font-weight: 500;">Remember: Call emergency services immediately for all life-threatening situations.</p>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        // Close modal
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Search functionality with debounce
+        let searchTimeout;
+        function searchEmergencies() {
+            clearTimeout(searchTimeout);
+            loader.style.display = 'block';
+            emergencyGrid.style.opacity = '0.5';
+            
+            searchTimeout = setTimeout(() => {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                if (!searchTerm) {
+                    populateEmergencyCards();
+                } else {
+                    const filtered = emergencies.filter(emergency => 
+                        emergency.title.toLowerCase().includes(searchTerm) ||
+                        emergency.steps.some(step => step.toLowerCase().includes(searchTerm)) ||
+                        emergency.warning?.toLowerCase().includes(searchTerm)
+                    );
+                    populateEmergencyCards(filtered);
+                }
+                
+                loader.style.display = 'none';
+                emergencyGrid.style.opacity = '1';
+            }, 500);
+        }
+
+        // Event listeners
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        searchInput.addEventListener('input', searchEmergencies);
+        searchInput.addEventListener('focus', () => {
+            searchInput.placeholder = 'Type to search (e.g., "choking", "heart attack", "burn")...';
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.placeholder = 'Search emergency situations...';
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Focus search on Ctrl+/ or Cmd+/
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Close modal on Escape
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        populateEmergencyCards();
+    </script>
+</body>
+</html>

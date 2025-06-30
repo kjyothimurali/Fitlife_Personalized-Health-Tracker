@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Health Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 20px;
+            font-size: 22px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            background: #f8f9fa;
+            color: #333;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #3498db;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        button {
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 25px 0 15px;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #gauge-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+        }
+        #gauge {
+            width: 100%;
+            height: 100%;
+        }
+        #score-breakdown {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #dfe6e9;
+        }
+        #score-breakdown p {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        #score-breakdown span {
+            font-weight: bold;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        li {
+            background: #e3f2fd;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 8px;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s;
+        }
+        li:hover {
+            background: #d0e3f7;
+            transform: translateX(5px);
+        }
+        .health-message {
+            font-size: 18px;
+            text-align: center;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .excellent {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .good {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .fair {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .poor {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            input, button {
+                padding: 10px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Health Score Calculator</h1>
+        <form id="health-form">
+            <label for="age">Age (years):</label>
+            <input type="number" id="age" min="1" max="120" required>
+            <label for="gender">Gender:</label>
+<select id="gender" required>
+  <option value="">Select</option>
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+  <option value="other">Other</option>
+</select>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" min="1" max="300" required>
+            
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" min="50" max="250" required>
+            
+            <label for="sleep">Sleep (hours/day):</label>
+            <input type="number" id="sleep" min="0" max="24" step="0.5" required>
+            
+            <label for="water">Water Intake (liters/day):</label>
+            <input type="number" id="water" min="0" max="10" step="0.1" required>
+            
+            <label for="exercise">Exercise (hours/week):</label>
+            <input type="number" id="exercise" min="0" max="40" step="0.5" required>
+            
+            <label for="diet">Diet Quality (1-10):</label>
+            <input type="number" id="diet" min="1" max="10" required>
+            
+            <label for="stress">Stress Level (1-10):</label>
+            <input type="number" id="stress" min="1" max="10" required>
+            
+            <label for="smoking">Smoking Status:</label>
+            <select id="smoking" required>
+                <option value="0">Non-smoker</option>
+                <option value="1">Smoker</option>
+            </select>
+            
+            <button type="submit">Calculate My Health Score</button>
+        </form>
+        
+        <div id="result" style="display: none;">
+            <div id="gauge-container">
+                <canvas id="gauge"></canvas>
+            </div>
+            
+            <h2 id="health-score"></h2>
+            <div id="health-message" class="health-message"></div>
+            
+            <div id="score-breakdown">
+                <h3>Score Breakdown</h3>
+                <div id="breakdown-content"></div>
+            </div>
+            
+            <h3>Health Suggestions:</h3>
+            <ul id="suggestions"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("health-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get and validate input values
+            const inputs = {
+                age: getValidatedInput('age', 1, 120, "Please enter a valid age (1-120 years)"),
+                weight: getValidatedInput('weight', 1, 300, "Please enter a valid weight (1-300 kg)"),
+                height: getValidatedInput('height', 50, 250, "Please enter a valid height (50-250 cm)"),
+                sleep: getValidatedInput('sleep', 0, 24, "Please enter a valid sleep duration (0-24 hours)"),
+                water: getValidatedInput('water', 0, 10, "Please enter a valid water intake (0-10 liters)"),
+                exercise: getValidatedInput('exercise', 0, 40, "Please enter a valid exercise duration (0-40 hours/week)"),
+                diet: getValidatedInput('diet', 1, 10, "Please enter a valid diet quality (1-10)"),
+                stress: getValidatedInput('stress', 1, 10, "Please enter a valid stress level (1-10)"),
+                smoking: parseInt(document.getElementById("smoking").value)
+            };
+
+            // Calculate BMI
+            const heightInMeters = inputs.height / 100;
+            const bmi = (inputs.weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+            // Calculate health score components
+            const components = {
+                bmi: calculateBMIScore(bmi),
+                sleep: calculateSleepScore(inputs.sleep),
+                water: calculateWaterScore(inputs.water),
+                exercise: calculateExerciseScore(inputs.exercise),
+                diet: calculateDietScore(inputs.diet),
+                stress: calculateStressScore(inputs.stress),
+                smoking: inputs.smoking ? -15 : 0
+            };
+
+            // Calculate total score (0-100 scale)
+            let healthScore = Object.values(components).reduce((sum, score) => sum + score, 0);
+            healthScore = Math.max(0, Math.min(100, Math.round(healthScore)));
+
+            // Display results
+            displayResults(healthScore, bmi, components, inputs);
+        });
+
+        // Helper functions
+        function getValidatedInput(id, min, max, errorMsg) {
+            const value = parseFloat(document.getElementById(id).value);
+            if (isNaN(value) || value < min || value > max) {
+                alert(errorMsg);
+                throw new Error("Invalid input");
+            }
+            return value;
+        }
+
+        function calculateBMIScore(bmi) {
+            if (bmi < 16) return 0;
+            if (bmi < 18.5) return mapRange(bmi, 16, 18.5, 0, 20);
+            if (bmi <= 25) return 20;
+            if (bmi <= 30) return mapRange(bmi, 25, 30, 20, 10);
+            return mapRange(bmi, 30, 40, 10, 0);
+        }
+
+        function calculateSleepScore(hours) {
+            if (hours >= 7 && hours <= 9) return 20;
+            if (hours >= 6 && hours < 7) return mapRange(hours, 6, 7, 15, 20);
+            if (hours > 9 && hours <= 10) return mapRange(hours, 9, 10, 20, 15);
+            if (hours >= 5 && hours < 6) return mapRange(hours, 5, 6, 10, 15);
+            if (hours > 10 && hours <= 12) return mapRange(hours, 10, 12, 15, 5);
+            return mapRange(hours, 0, 5, 0, 10);
+        }
+
+        function calculateWaterScore(liters) {
+            return Math.min(15, mapRange(liters, 0, 3, 0, 15));
+        }
+
+        function calculateExerciseScore(hours) {
+            return Math.min(20, mapRange(hours, 0, 10, 0, 20));
+        }
+
+        function calculateDietScore(quality) {
+            return mapRange(quality, 1, 10, 0, 15);
+        }
+
+        function calculateStressScore(level) {
+            return mapRange(level, 1, 10, 10, 0);
+        }
+
+        function mapRange(value, inMin, inMax, outMin, outMax) {
+            return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+        }
+
+        function displayResults(score, bmi, components, inputs) {
+            document.getElementById("result").style.display = "block";
+            document.getElementById("health-score").innerText = `Your Health Score: ${score}/100`;
+            
+            // Set health message based on score
+            const healthMessage = document.getElementById("health-message");
+            if (score >= 80) {
+                healthMessage.textContent = "Excellent! You're in great health!";
+                healthMessage.className = "health-message excellent";
+            } else if (score >= 60) {
+                healthMessage.textContent = "Good! You're doing well with room for improvement.";
+                healthMessage.className = "health-message good";
+            } else if (score >= 40) {
+                healthMessage.textContent = "Fair. There are several areas you could improve.";
+                healthMessage.className = "health-message fair";
+            } else {
+                healthMessage.textContent = "Needs Improvement. Consider making some health changes.";
+                healthMessage.className = "health-message poor";
+            }
+            
+            // Display component scores
+            const breakdownContent = document.getElementById("breakdown-content");
+            breakdownContent.innerHTML = `
+                <p>BMI: <span>${components.bmi.toFixed(1)}/20</span></p>
+                <p>Sleep: <span>${components.sleep.toFixed(1)}/20</span></p>
+                <p>Water: <span>${components.water.toFixed(1)}/15</span></p>
+                <p>Exercise: <span>${components.exercise.toFixed(1)}/20</span></p>
+                <p>Diet: <span>${components.diet.toFixed(1)}/15</span></p>
+                <p>Stress: <span>${components.stress.toFixed(1)}/10</span></p>
+                <p>Smoking: <span>${components.smoking.toFixed(1)}</span></p>
+            `;
+            
+            drawGauge(score);
+            generateSuggestions(score, bmi, inputs);
+        }
+
+        function generateSuggestions(score, bmi, inputs) {
+            const suggestions = [];
+            
+            // BMI suggestions
+            if (bmi < 18.5) {
+                suggestions.push("Your BMI suggests underweight. Consider consulting a nutritionist for dietary advice.");
+            } else if (bmi > 25) {
+                suggestions.push(`Your BMI of ${bmi} suggests overweight. A balanced diet and regular exercise can help.`);
+            }
+            
+            // Sleep suggestions
+            if (inputs.sleep < 7) {
+                suggestions.push(`Aim for 7-9 hours of sleep (currently ${inputs.sleep} hours). Improve sleep hygiene by maintaining a consistent schedule.`);
+            } else if (inputs.sleep > 9) {
+                suggestions.push(`While ${inputs.sleep} hours of sleep might seem good, excessive sleep can indicate health issues.`);
+            }
+            
+            // Water suggestions
+            if (inputs.water < 1.5) {
+                suggestions.push(`Increase water intake from ${inputs.water}L to at least 1.5-2 liters daily for proper hydration.`);
+            } else if (inputs.water > 3) {
+                suggestions.push(`Your water intake of ${inputs.water}L is quite high. Excessive water can be harmful.`);
+            }
+            
+            // Exercise suggestions
+            if (inputs.exercise < 2.5) {
+                suggestions.push(`Try to get at least 2.5 hours of moderate exercise weekly (currently ${inputs.exercise} hours).`);
+            } else if (inputs.exercise > 15) {
+                suggestions.push(`Your exercise routine (${inputs.exercise} hours/week) is intense. Ensure you have adequate recovery time.`);
+            }
+            
+            // Diet suggestions
+            if (inputs.diet < 5) {
+                suggestions.push(`Improve your diet (rated ${inputs.diet}/10) by incorporating more whole foods, fruits, and vegetables.`);
+            } else if (inputs.diet >= 8) {
+                suggestions.push(`Great job with your diet (rated ${inputs.diet}/10)! Keep up the healthy eating habits.`);
+            }
+            
+            // Stress suggestions
+            if (inputs.stress > 5) {
+                suggestions.push(`Your stress level (${inputs.stress}/10) is elevated. Practice mindfulness or relaxation techniques.`);
+            }
+            
+            // Smoking suggestions
+            if (inputs.smoking) {
+                suggestions.push("Quitting smoking would significantly improve your health. Consider cessation programs or nicotine replacement therapy.");
+            }
+            
+            // General encouragement for good scores
+            if (score >= 80 && suggestions.length === 0) {
+                suggestions.push("You're doing great! Keep maintaining these healthy habits.");
+            }
+            
+            // Display suggestions
+            const suggestionsList = document.getElementById("suggestions");
+            suggestionsList.innerHTML = suggestions.length > 0 
+                ? suggestions.map(s => `<li>${s}</li>`).join('')
+                : "<li>Your health habits are generally good. Keep it up!</li>";
+        }
+
+        function drawGauge(score) {
+            const canvas = document.getElementById('gauge');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear previous drawing
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height;
+            const radius = Math.min(canvas.width, canvas.height * 2) * 0.4;
+            
+            // Draw gauge background
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, 2 * Math.PI);
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = '#ecf0f1';
+            ctx.stroke();
+            
+            // Draw score arc
+            const endAngle = Math.PI + (Math.PI * (score / 100));
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, endAngle);
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = getHealthColor(score);
+            ctx.stroke();
+            
+            // Draw score text
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = '#2c3e50';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${score}`, centerX, centerY - 20);
+            
+            // Draw label
+            ctx.font = '16px Arial';
+            ctx.fillText('Health Score', centerX, centerY + 10);
+        }
+
+        function getHealthColor(score) {
+            if (score >= 80) return '#2ecc71';
+            if (score >= 60) return '#3498db';
+            if (score >= 40) return '#f39c12';
+            if (score >= 20) return '#e67e22';
+            return '#e74c3c';
+        }
+        function saveUserDetails() {
+    const age = document.getElementById("age").value;
+    const height = document.getElementById("height").value;
+    const weight = document.getElementById("weight").value;
+    const gender = document.getElementById("gender").value;
+
+    // Store in localStorage
+    localStorage.setItem("age", age);
+    localStorage.setItem("height", height);
+    localStorage.setItem("weight", weight);
+    localStorage.setItem("gender", gender);
+
+    // Redirect to profile
+    window.location.href = "profile.html";
+  }
+    </script>
+</body>
+</html>

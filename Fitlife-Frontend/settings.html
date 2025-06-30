@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+        <a href="about.html">About</a>
+        <a href="logout.html">Logout</a>
+    </div>
+
+    <div class="content">
+        <h2>Settings</h2>
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Enter new name"><br><br>
+        
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="Enter new email"><br><br>
+        
+        <button onclick="saveSettings()">Save</button>
+    </div>
+
+    <script>
+        // Load existing values
+        document.getElementById("name").value = localStorage.getItem("userName") || "";
+        document.getElementById("email").value = localStorage.getItem("userEmail") || "";
+
+        function saveSettings() {
+            let newName = document.getElementById("name").value;
+            let newEmail = document.getElementById("email").value;
+
+            localStorage.setItem("userName", newName);
+            localStorage.setItem("userEmail", newEmail);
+
+            alert("Settings saved successfully!");
+        }
+    </script>
+</body>
+</html>

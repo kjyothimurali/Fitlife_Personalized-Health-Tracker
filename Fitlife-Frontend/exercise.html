@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Recommendation & Calories Burned</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #e0f7fa;
+        }
+        h2 {
+            color: #333;
+        }
+        select, input, button {
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        p {
+            color: red;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin-top: 20px;
+        }
+        .exercise-container, .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        iframe {
+            width: 560px;
+            height: 315px;
+            border-radius: 10px;
+        }
+    </style>
+    <script>
+        const MET_VALUES = {
+            basketball: 8,
+            running: 10,
+            walking: 3.8,
+            pullups: 6,
+            cycling: 7.5,
+            swimming: 8,
+            jumping_rope: 12,
+            yoga: 3,
+            weightlifting: 5,
+            dancing: 6.5
+        };
+        
+        function calculateCalories() {
+            const exercise = document.getElementById("exercise").value;
+            const duration = document.getElementById("duration").value;
+            let weight = 70; // Assume average weight of 70 kg for calculation
+            let caloriesBurned = 0;
+            
+            if (MET_VALUES[exercise]) {
+                caloriesBurned = (MET_VALUES[exercise] * weight * duration) / 60;
+            }
+            
+            document.getElementById("calories").innerText = `Calories Burned: ${caloriesBurned.toFixed(2)} kcal`;
+        }
+        
+        function recommendVideo() {
+    const intensity = document.getElementById("intensity").value;
+    let message = "";
+    let videos = [];
+
+    if (intensity === "easy") {
+        videos = [
+            "https://www.youtube.com/embed/FB5-7tIiX-I?si=ElSmp62Ot5TVf_zG",
+            "https://www.youtube.com/embed/TqF0RpAF4pc?si=EUafz9nPH8FpGRLi",
+            "https://www.youtube.com/embed/wK99lII1oFM?si=JF7pK_krGPxVywsL"
+        ];
+    } else if (intensity === "moderate") {
+        message = "Note: Not for children under age 15, without parent's vision.";
+        videos = [
+            "https://www.youtube.com/embed/vnBXaCsoEPU?si=EOtGCeOt3fBi0PLh",
+            "https://www.youtube.com/embed/PvEnWsPrL4w?si=NwMJroQBMe0FHC9s",
+            "https://www.youtube.com/embed/7moiO_g-GAA?si=bFS7-BtVRtrzYYBy"
+        ];
+    } else if (intensity === "hard") {
+        message = "Note: Do not perform harder exercises without a trainer.";
+        videos = [
+            "https://www.youtube.com/embed/ml6cT4AZdqI?si=iIL0av4qTYSjNjKJ",
+            "https://www.youtube.com/embed/M0uO8X3_tEA?si=ds-hA7DCdcoYWA8X",
+            "https://www.youtube.com/embed/Ba3qZjzPonI?si=lr4oSCIjfzA1sMTm"
+        ];
+    }
+
+    // Clear the previous message
+    document.getElementById("message").innerText = message;
+
+    // Clear previous videos before adding new ones
+    let videoContainer = document.getElementById("video-container");
+    videoContainer.innerHTML = "";
+
+    videos.forEach(video => {
+        let iframe = document.createElement("iframe");
+        iframe.src = video;
+        iframe.allowFullscreen = true;
+        videoContainer.appendChild(iframe);
+    });
+}
+
+    </script>
+</head>
+<body>
+    <h2>Exercise Selection & Recommendations</h2>
+    <div class="container">
+        <div class="exercise-container">
+            <h3>Select Exercise & Duration</h3>
+            <select id="exercise">
+                <option value="select">select workout</option>
+                <option value="basketball">Basketball</option>
+                <option value="running">Running</option>
+                <option value="walking">Walking</option>
+                <option value="pullups">Pull-ups</option>
+                <option value="cycling">Cycling</option>
+                <option value="swimming">Swimming</option>
+                <option value="jumping_rope">Jumping Rope</option>
+                <option value="yoga">Yoga</option>
+                <option value="weightlifting">Weightlifting</option>
+                <option value="dancing">Dancing</option>
+            </select>
+            <input type="number" id="duration" placeholder="Duration (minutes)">
+            <button onclick="calculateCalories()">Calculate Calories</button>
+            <p id="calories"></p>
+        </div>
+        <div class="video-container">
+            <h3>Select Exercise Intensity</h3>
+            <select id="intensity">
+                <option value="easy">Easy</option>
+                <option value="moderate">Moderate</option>
+                <option value="hard">Hard</option>
+            </select>
+            <button onclick="recommendVideo()">Get Video Recommendation</button>
+            <p id="message"></p>
+            <div id="video-container"></div>
+        </div>
+    </div>
+</body>
+</html>

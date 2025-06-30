@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #6a0572;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        input {
+            background: #f4f4f4;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #6a0572;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #a18cd1;
+        }
+        #chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sleep Tracker</h2>
+
+        <label>Hours Slept</label>
+        <input type="number" id="sleep-hours" min="1" max="12" placeholder="Enter hours slept">
+
+        <button id="save-sleep">Save Sleep Data</button>
+
+        <h3>Sleep Data (Last 7 Days)</h3>
+        <div id="chart-container">
+            <canvas id="sleepChart"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("save-sleep").addEventListener("click", async function() {
+            const userToken = localStorage.getItem("token"); // Get token from login
+            if (!userToken) {
+                alert("Please login first.");
+                return;
+            }
+
+            const sleepHours = document.getElementById("sleep-hours").value;
+            if (!sleepHours) {
+                alert("Enter sleep hours");
+                return;
+            }
+
+            const sleepQuality = calculateSleepQuality(sleepHours);
+            const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+
+            try {
+                const response = await fetch("http://localhost:5000/api/sleep", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    body: JSON.stringify({ sleep_duration: sleepHours, sleep_quality: sleepQuality, date })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+                loadSleepData(); // Refresh chart
+            } catch (error) {
+                console.error("Error saving sleep data:", error);
+            }
+        });
+
+        function calculateSleepQuality(hours) {
+            if (hours >= 7 && hours <= 9) return "Good";
+            if (hours >= 5 && hours < 7) return "Average";
+            return "Poor";
+        }
+
+        async function loadSleepData() {
+            const userToken = localStorage.getItem("token");
+            if (!userToken) return;
+
+            try {
+                const response = await fetch("http://localhost:5000/api/sleep", {
+                    headers: { "Authorization": `Bearer ${userToken}` }
+                });
+                const sleepData = await response.json();
+
+                let sleepHours = sleepData.map(entry => entry.sleep_duration);
+                let labels = sleepData.map((_, index) => `Day ${index + 1}`);
+
+                updateChart(labels, sleepHours);
+            } catch (error) {
+                console.error("Error loading sleep data:", error);
+            }
+        }
+
+        function updateChart(labels, data) {
+            let ctx = document.getElementById("sleepChart").getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Hours Slept",
+                        data: data,
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, suggestedMax: 10 }
+                    }
+                }
+            });
+        }
+
+        loadSleepData();
+    </script>
+</body>
+</html>

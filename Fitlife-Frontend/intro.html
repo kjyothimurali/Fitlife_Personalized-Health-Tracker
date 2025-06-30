@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthTrack</title>
+ <style>
+     /* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-image: url('https://media.assettype.com/analyticsinsight/2024-07/a6510801-5316-4229-bc7e-07e6e659ce49/How_Data_Analysis_Plays_A_Key_Role_in_IPL.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  color: #333333;
+  line-height: 1.6;
+  position: relative; /* Ensure pseudo-element is positioned relative to the body */
+}
+
+body::before {
+  content: ''; /* Creates an empty pseudo-element */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3); /* Black overlay with 30% opacity */
+  z-index: -1; /* Places the overlay behind all content */
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(213, 175, 200, 0.7);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in;
+  transition: background-color 0.3s ease;
+}
+
+header:hover {
+  background-color: rgba(213, 175, 200, 1);  /* Darken background on hover */
+}
+
+
+header .logo {
+  display: flex;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  color: #994caf; /* Green color to represent health */
+  margin-left: 10px;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+nav a:hover {
+  color: #d4c4d4;
+  transform: translateY(-3px);  /* Lift effect on hover */
+}
+
+
+nav .cta {
+  background-color: #a54caf;
+  padding: 10px 20px;
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+nav .cta:hover {
+  background-color: #9d45a0;
+}
+
+/* Hero Section */
+.hero {
+  background: url('');
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+  animation: fadeIn 1.5s ease-in;
+}
+
+.hero h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: slideUp 1s ease-out;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.cta-buttons a {
+  text-decoration: none;
+  margin: 0 10px;
+  padding: 15px 25px;
+  background-color: #a84caf;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-buttons a:hover {
+  background-color: #8b37a0;
+  transform: scale(1.05);  /* Slight zoom effect on hover */
+}
+
+.cta-buttons .cta-outline:hover {
+  color: #af4caa;
+  border-color: #81418e;
+  transform: scale(1.05);  /* Slight zoom effect */
+}
+
+
+/* About Section */
+#about {
+  padding: 40px 20px;
+  background-color: rgba(247, 247, 247, 0.9); /* Light background with transparency */
+  text-align: center;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+#about h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  animation: fadeInUp 1.7s ease-out;
+}
+
+.feature-item {
+  width: 30%;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeInUp 1.8s ease-out forwards;
+}
+
+.feature-item:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.feature-item:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.feature-item:nth-child(3) {
+  animation-delay: 0.9s;
+}
+
+.feature-item img {
+  width: 250px;
+  height: 100px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.feature-item img:hover {
+  transform: scale(1.1);  /* Zoom-in effect */
+  filter: brightness(1.2); /* Slightly brighten the image */
+}
+
+.feature-item h3 {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  color: #ad4caf;
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: rgb(50, 205, 112);
+  padding: 20px;
+  text-align: center;
+  animation: fadeIn 2s ease-out;
+}
+
+footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+footer ul li {
+  display: inline-block;
+  margin: 0 10px;
+}
+footer a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+footer a:hover {
+  color: #4CAF50;
+  transform: translateY(-2px);  /* Lift effect */
+}
+
+#pricing{
+  background-color: rgba(247, 247, 247, 0.9);
+}
+#testimonials{
+  background-color: rgba(247, 247, 247, 0.9);
+}
+#faq{
+  background-color: rgba(247, 247, 247, 0.9);
+}
+#lifestyle-images {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 20px;
+  background-color: #f7f7f7; /* Light background color */
+  text-align: center;
+}
+
+.lifestyle-item {
+  width: 30%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  float: left;
+}
+
+.lifestyle-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.lifestyle-item h3 {
+  font-size: 1.2rem;
+  color: #994caf; /* Use your brand color */
+  margin-top: 10px;
+}
+
+.lifestyle-item:hover {
+  transform: scale(1.05);  /* Zoom effect on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Add shadow on hover */
+}
+
+.lifestyle-item img:hover {
+  transform: scale(1.1); /* Slight zoom-in effect for the image */
+}
+
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ </style>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      
+      <h1>HealthTrack</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="login.html">Sign In</a></li>
+        <li><a href="signup.html" class="cta">Sign Up</a></li>
+      </ul>
+    </nav>
+    <button id="dark-mode-toggle">🌙</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Your Personalized Health Companion</h2>
+      <p>Track your health metrics and get customized tips to live your healthiest life.</p>
+      <div class="cta-buttons">
+        <a href="signup.html" class="cta">Sign Up Now</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About HealthTrack</h2>
+    <p>Monitor your exercise, diet, and hydration in one place.</p>
+    <section id="lifestyle-images">
+      <div class="lifestyle-item">
+        <img src="https://domf5oio6qrcr.cloudfront.net/medialibrary/7909/conversions/b8a1309a-ba53-48c7-bca3-9c36aab2338a-thumb.jpg" alt="Water" />
+        <h3>Water</h3>
+      </div>
+      <div class="lifestyle-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2dYAwaJjFIlHkPb1rG1eVrTP3HKyh0O2xZQ&s" alt="Diet" />
+        <h3>Diet</h3>
+      </div>
+      <div class="lifestyle-item">
+        <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTJzxgdkuQ5851N5C5jscP5MjbI8Rk7xrxRNzUeNQAC890S73Eq" alt="Exercise" />
+        <h3>Exercise</h3>
+      </div>
+    </section>
+    
+  </section>
+
+  <section id="pricing">
+    <h2>Choose Your Plan</h2>
+    <div class="pricing-card">
+      <h3>Free Plan</h3>
+      <p>Basic health tracking features</p>
+      <a href="signup.html" class="cta">Get Started</a>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <h3>How do I monitor my water consumption?</h3>
+      <p>Use the built-in water tracking feature to monitor your water-intake patterns.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is my data secure?</h3>
+      <p>Yes! We use end-to-end encryption to keep your data safe.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 HealthTrack. All rights reserved.</p>
+  </footer>
+</body>
+</html>

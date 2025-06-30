@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrient Sources Finder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nutrient-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nutrient-category {
+            margin-bottom: 20px;
+        }
+        
+        .category-title {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .nutrient-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nutrient-checkbox {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .nutrient-label {
+            cursor: pointer;
+        }
+        
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 25px auto;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #27ae60;
+        }
+        
+        .results {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .result-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .nutrient-name {
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 5px;
+        }
+        
+        .nutrient-sources {
+            color: #555;
+            white-space: pre-line;
+        }
+        
+        .no-selection {
+            color: #7f8c8d;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .daily-requirement {
+            font-style: italic;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .source-item {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nutrient Sources Finder</h1>
+    
+    <div class="nutrient-container">
+        <div class="nutrient-category">
+            <div class="category-title">Macronutrients</div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="proteins" class="nutrient-checkbox">
+                <label for="proteins" class="nutrient-label">Proteins</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="fats" class="nutrient-checkbox">
+                <label for="fats" class="nutrient-label">Fats</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="carbs" class="nutrient-checkbox">
+                <label for="carbs" class="nutrient-label">Carbohydrates</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="fiber" class="nutrient-checkbox">
+                <label for="fiber" class="nutrient-label">Fiber</label>
+            </div>
+        </div>
+        
+        <div class="nutrient-category">
+            <div class="category-title">Vitamins</div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-a" class="nutrient-checkbox">
+                <label for="vitamin-a" class="nutrient-label">Vitamin A</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b1" class="nutrient-checkbox">
+                <label for="vitamin-b1" class="nutrient-label">Vitamin B1 (Thiamine)</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b2" class="nutrient-checkbox">
+                <label for="vitamin-b2" class="nutrient-label">Vitamin B2 (Riboflavin)</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b3" class="nutrient-checkbox">
+                <label for="vitamin-b3" class="nutrient-label">Vitamin B3 (Niacin)</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b6" class="nutrient-checkbox">
+                <label for="vitamin-b6" class="nutrient-label">Vitamin B6</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b9" class="nutrient-checkbox">
+                <label for="vitamin-b9" class="nutrient-label">Vitamin B9 (Folate)</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-b12" class="nutrient-checkbox">
+                <label for="vitamin-b12" class="nutrient-label">Vitamin B12</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-c" class="nutrient-checkbox">
+                <label for="vitamin-c" class="nutrient-label">Vitamin C</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-d" class="nutrient-checkbox">
+                <label for="vitamin-d" class="nutrient-label">Vitamin D</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-e" class="nutrient-checkbox">
+                <label for="vitamin-e" class="nutrient-label">Vitamin E</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="vitamin-k" class="nutrient-checkbox">
+                <label for="vitamin-k" class="nutrient-label">Vitamin K</label>
+            </div>
+        </div>
+        
+        <div class="nutrient-category">
+            <div class="category-title">Minerals</div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="calcium" class="nutrient-checkbox">
+                <label for="calcium" class="nutrient-label">Calcium</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="iron" class="nutrient-checkbox">
+                <label for="iron" class="nutrient-label">Iron</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="magnesium" class="nutrient-checkbox">
+                <label for="magnesium" class="nutrient-label">Magnesium</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="zinc" class="nutrient-checkbox">
+                <label for="zinc" class="nutrient-label">Zinc</label>
+            </div>
+            <div class="nutrient-item">
+                <input type="checkbox" id="potassium" class="nutrient-checkbox">
+                <label for="potassium" class="nutrient-label">Potassium</label>
+            </div>
+        </div>
+    </div>
+    
+    <button id="show-sources">Show Selected Nutrient Sources</button>
+    
+    <div class="results" id="results">
+        <h2>Nutrient Sources</h2>
+        <div id="results-content"></div>
+    </div>
+    
+    <script>
+        // Nutrient data with sources, quantities, and daily requirements
+        const nutrientData = {
+            "proteins": {
+                "name": "Proteins",
+                "daily_requirement": "Men: 56g/day, Women: 46g/day, Pregnant: 71g/day",
+                "sources": [
+                    "Beef (26g per 100g)",
+                    "Chicken (27g per 100g)",
+                    "Pork (25g per 100g)",
+                    "Salmon (20g per 100g)",
+                    "Eggs (13g per 100g)",
+                    "Greek Yogurt (10g per 100g)",
+                    "Cottage Cheese (11g per 100g)",
+                    "Tofu (8g per 100g)",
+                    "Lentils (9g per 100g)",
+                    "Quinoa (4g per 100g)"
+                ]
+            },
+            "fats": {
+                "name": "Fats",
+                "daily_requirement": "20-35% of total calories (about 44-77g for 2000 calorie diet)",
+                "sources": [
+                    "Avocados (15g per 100g)",
+                    "Almonds (49g per 100g)",
+                    "Chia seeds (31g per 100g)",
+                    "Olive oil (100g per 100g)",
+                    "Coconut oil (100g per 100g)",
+                    "Salmon (13g per 100g)",
+                    "Butter (81g per 100g)",
+                    "Cheese (34g per 100g)",
+                    "Dark chocolate (43g per 100g)",
+                    "Whole milk (3.6g per 100g)"
+                ]
+            },
+            "carbs": {
+                "name": "Carbohydrates",
+                "daily_requirement": "45-65% of total calories (about 225-325g for 2000 calorie diet)",
+                "sources": [
+                    "Brown rice (23g per 100g)",
+                    "Bananas (23g per 100g)",
+                    "Apples (14g per 100g)",
+                    "Potatoes (17g per 100g)",
+                    "Lentils (20g per 100g)",
+                    "Oats (66g per 100g)",
+                    "Whole wheat bread (49g per 100g)",
+                    "Pasta (25g per 100g)",
+                    "Corn (19g per 100g)",
+                    "Peas (14g per 100g)"
+                ]
+            },
+            "fiber": {
+                "name": "Fiber",
+                "daily_requirement": "Men: 38g/day, Women: 25g/day",
+                "sources": [
+                    "Oats (10g per 100g)",
+                    "Raspberries (6.5g per 100g)",
+                    "Apples (2.4g per 100g)",
+                    "Broccoli (2.6g per 100g)",
+                    "Chickpeas (7.6g per 100g)",
+                    "Almonds (12.5g per 100g)",
+                    "Chia seeds (34g per 100g)",
+                    "Avocados (6.7g per 100g)",
+                    "Sweet potatoes (3g per 100g)",
+                    "Whole wheat bread (6g per 100g)"
+                ]
+            },
+            "vitamin-a": {
+                "name": "Vitamin A",
+                "daily_requirement": "Men: 900mcg, Women: 700mcg, Pregnant: 770mcg",
+                "sources": [
+                    "Carrots (835mcg per 100g)",
+                    "Sweet potatoes (709mcg per 100g)",
+                    "Spinach (469mcg per 100g)",
+                    "Kale (681mcg per 100g)",
+                    "Beef liver (9,442mcg per 100g)",
+                    "Eggs (140mcg per 100g)",
+                    "Fortified milk (56mcg per 100g)",
+                    "Red bell peppers (157mcg per 100g)",
+                    "Mangoes (54mcg per 100g)",
+                    "Apricots (96mcg per 100g)"
+                ]
+            },
+            "vitamin-b1": {
+                "name": "Vitamin B1 (Thiamine)",
+                "daily_requirement": "Men: 1.2mg, Women: 1.1mg, Pregnant: 1.4mg",
+                "sources": [
+                    "Brown rice (0.2mg per 100g)",
+                    "Pork (0.7mg per 100g)",
+                    "Trout (0.3mg per 100g)",
+                    "Black beans (0.2mg per 100g)",
+                    "Macadamia nuts (0.7mg per 100g)",
+                    "Sunflower seeds (1.5mg per 100g)",
+                    "Peas (0.2mg per 100g)",
+                    "Fortified cereals (0.5-2mg per 100g)",
+                    "Asparagus (0.1mg per 100g)",
+                    "Spinach (0.1mg per 100g)"
+                ]
+            },
+            "vitamin-b2": {
+                "name": "Vitamin B2 (Riboflavin)",
+                "daily_requirement": "Men: 1.3mg, Women: 1.1mg, Pregnant: 1.4mg",
+                "sources": [
+                    "Milk (0.2mg per 100g)",
+                    "Eggs (0.5mg per 100g)",
+                    "Beef (0.2mg per 100g)",
+                    "Spinach (0.2mg per 100g)",
+                    "Fortified cereals (0.5-1.7mg per 100g)",
+                    "Almonds (1.1mg per 100g)",
+                    "Mushrooms (0.4mg per 100g)",
+                    "Quinoa (0.1mg per 100g)",
+                    "Whole wheat bread (0.1mg per 100g)",
+                    "Asparagus (0.1mg per 100g)"
+                ]
+            },
+            "vitamin-b3": {
+                "name": "Vitamin B3 (Niacin)",
+                "daily_requirement": "Men: 16mg, Women: 14mg, Pregnant: 18mg",
+                "sources": [
+                    "Chicken (10mg per 100g)",
+                    "Beef (5mg per 100g)",
+                    "Tuna (18mg per 100g)",
+                    "Brown rice (2mg per 100g)",
+                    "Peanuts (12mg per 100g)",
+                    "Lentils (2mg per 100g)",
+                    "Fortified cereals (5-20mg per 100g)",
+                    "Mushrooms (4mg per 100g)",
+                    "Avocados (2mg per 100g)",
+                    "Potatoes (1mg per 100g)"
+                ]
+            },
+            "vitamin-b6": {
+                "name": "Vitamin B6",
+                "daily_requirement": "Men: 1.3-1.7mg, Women: 1.3-1.5mg, Pregnant: 1.9mg",
+                "sources": [
+                    "Chickpeas (0.5mg per 100g)",
+                    "Tuna (0.5mg per 100g)",
+                    "Salmon (0.6mg per 100g)",
+                    "Chicken (0.5mg per 100g)",
+                    "Potatoes (0.3mg per 100g)",
+                    "Bananas (0.4mg per 100g)",
+                    "Fortified cereals (0.5-2mg per 100g)",
+                    "Spinach (0.2mg per 100g)",
+                    "Avocados (0.3mg per 100g)",
+                    "Pistachios (1.7mg per 100g)"
+                ]
+            },
+            "vitamin-b9": {
+                "name": "Vitamin B9 (Folate)",
+                "daily_requirement": "Adults: 400mcg, Pregnant: 600mcg",
+                "sources": [
+                    "Spinach (194mcg per 100g)",
+                    "Lentils (181mcg per 100g)",
+                    "Sunflower seeds (227mcg per 100g)",
+                    "Beef liver (290mcg per 100g)",
+                    "Fortified grains (100-400mcg per 100g)",
+                    "Oranges (30mcg per 100g)",
+                    "Avocados (81mcg per 100g)",
+                    "Brussels sprouts (61mcg per 100g)",
+                    "Asparagus (52mcg per 100g)",
+                    "Broccoli (63mcg per 100g)"
+                ]
+            },
+            "vitamin-b12": {
+                "name": "Vitamin B12",
+                "daily_requirement": "Adults: 2.4mcg, Pregnant: 2.6mcg",
+                "sources": [
+                    "Beef (2.5mcg per 100g)",
+                    "Eggs (1.1mcg per 100g)",
+                    "Milk (0.5mcg per 100g)",
+                    "Fortified cereals (1-6mcg per 100g)",
+                    "Nutritional yeast (varies, often fortified)",
+                    "Clams (84mcg per 100g)",
+                    "Sardines (8mcg per 100g)",
+                    "Salmon (4mcg per 100g)",
+                    "Fortified plant milks (0.5-3mcg per 100g)",
+                    "Cheese (0.8mcg per 100g)"
+                ]
+            },
+            "vitamin-c": {
+                "name": "Vitamin C",
+                "daily_requirement": "Men: 90mg, Women: 75mg, Pregnant: 85mg",
+                "sources": [
+                    "Oranges (53mg per 100g)",
+                    "Strawberries (59mg per 100g)",
+                    "Red bell peppers (128mg per 100g)",
+                    "Broccoli (89mg per 100g)",
+                    "Kiwi (93mg per 100g)",
+                    "Tomatoes (14mg per 100g)",
+                    "Pineapple (48mg per 100g)",
+                    "Brussels sprouts (85mg per 100g)",
+                    "Cauliflower (48mg per 100g)",
+                    "Spinach (28mg per 100g)"
+                ]
+            },
+            "vitamin-d": {
+                "name": "Vitamin D",
+                "daily_requirement": "Adults: 15mcg (600IU), Seniors: 20mcg (800IU)",
+                "sources": [
+                    "Sunlight exposure (varies)",
+                    "Salmon (12mcg per 100g)",
+                    "Mackerel (16mcg per 100g)",
+                    "Egg yolks (1.1mcg per 100g)",
+                    "Fortified milk (2.5mcg per 100g)",
+                    "Fortified cereals (2-8mcg per 100g)",
+                    "Cod liver oil (250mcg per 100g)",
+                    "UV-exposed mushrooms (10mcg per 100g)",
+                    "Beef liver (1.2mcg per 100g)",
+                    "Fortified orange juice (2.5mcg per 100g)"
+                ]
+            },
+            "vitamin-e": {
+                "name": "Vitamin E",
+                "daily_requirement": "Adults: 15mg, Pregnant: 15mg",
+                "sources": [
+                    "Almonds (26mg per 100g)",
+                    "Sunflower seeds (35mg per 100g)",
+                    "Sunflower oil (41mg per 100g)",
+                    "Spinach (2mg per 100g)",
+                    "Fortified cereals (5-15mg per 100g)",
+                    "Avocados (2mg per 100g)",
+                    "Kiwi (1.5mg per 100g)",
+                    "Mango (1mg per 100g)",
+                    "Tomatoes (0.5mg per 100g)",
+                    "Peanuts (8mg per 100g)"
+                ]
+            },
+            "vitamin-k": {
+                "name": "Vitamin K",
+                "daily_requirement": "Men: 120mcg, Women: 90mcg",
+                "sources": [
+                    "Kale (817mcg per 100g)",
+                    "Spinach (483mcg per 100g)",
+                    "Broccoli (102mcg per 100g)",
+                    "Brussels sprouts (177mcg per 100g)",
+                    "Soybean oil (184mcg per 100g)",
+                    "Natto (850mcg per 100g)",
+                    "Green beans (43mcg per 100g)",
+                    "Peas (26mcg per 100g)",
+                    "Cabbage (76mcg per 100g)",
+                    "Asparagus (42mcg per 100g)"
+                ]
+            },
+            "calcium": {
+                "name": "Calcium",
+                "daily_requirement": "Adults: 1000-1200mg, Pregnant: 1000mg",
+                "sources": [
+                    "Milk (125mg per 100g)",
+                    "Cheese (700mg per 100g)",
+                    "Kale (150mg per 100g)",
+                    "Fortified almond milk (120mg per 100g)",
+                    "Tofu (350mg per 100g)",
+                    "Almonds (264mg per 100g)",
+                    "Sardines with bones (382mg per 100g)",
+                    "Fortified orange juice (140mg per 100g)",
+                    "White beans (240mg per 100g)",
+                    "Figs (35mg per 100g)"
+                ]
+            },
+            "iron": {
+                "name": "Iron",
+                "daily_requirement": "Men: 8mg, Women: 18mg, Pregnant: 27mg",
+                "sources": [
+                    "Beef (2.7mg per 100g)",
+                    "Chicken (1mg per 100g)",
+                    "Tuna (1mg per 100g)",
+                    "Lentils (3.3mg per 100g)",
+                    "Kidney beans (2.9mg per 100g)",
+                    "Spinach (2.7mg per 100g)",
+                    "Fortified cereals (4-18mg per 100g)",
+                    "Tofu (3.4mg per 100g)",
+                    "Pumpkin seeds (8.8mg per 100g)",
+                    "Quinoa (1.5mg per 100g)"
+                ]
+            },
+            "magnesium": {
+                "name": "Magnesium",
+                "daily_requirement": "Men: 400-420mg, Women: 310-320mg, Pregnant: 350-360mg",
+                "sources": [
+                    "Almonds (270mg per 100g)",
+                    "Pumpkin seeds (262mg per 100g)",
+                    "Brown rice (43mg per 100g)",
+                    "Spinach (79mg per 100g)",
+                    "Black beans (60mg per 100g)",
+                    "Dark chocolate (146mg per 100g)",
+                    "Avocados (29mg per 100g)",
+                    "Bananas (27mg per 100g)",
+                    "Tofu (30mg per 100g)",
+                    "Fortified cereals (40-100mg per 100g)"
+                ]
+            },
+            "zinc": {
+                "name": "Zinc",
+                "daily_requirement": "Men: 11mg, Women: 8mg, Pregnant: 11mg",
+                "sources": [
+                    "Beef (4mg per 100g)",
+                    "Oysters (78mg per 100g)",
+                    "Chickpeas (1.5mg per 100g)",
+                    "Pumpkin seeds (7.6mg per 100g)",
+                    "Cashews (5.6mg per 100g)",
+                    "Cheese (3mg per 100g)",
+                    "Eggs (1.3mg per 100g)",
+                    "Oats (2.3mg per 100g)",
+                    "Dark chocolate (3.3mg per 100g)",
+                    "Fortified cereals (2-15mg per 100g)"
+                ]
+            },
+            "potassium": {
+                "name": "Potassium",
+                "daily_requirement": "Adults: 3400mg (men), 2600mg (women), Pregnant: 2900mg",
+                "sources": [
+                    "Bananas (358mg per 100g)",
+                    "Potatoes (535mg per 100g)",
+                    "Sweet potatoes (337mg per 100g)",
+                    "Spinach (558mg per 100g)",
+                    "Kidney beans (403mg per 100g)",
+                    "Avocado (485mg per 100g)",
+                    "Yogurt (141mg per 100g)",
+                    "Oranges (181mg per 100g)",
+                    "Tomatoes (237mg per 100g)",
+                    "Peas (244mg per 100g)"
+                ]
+            }
+        };
+        
+        document.getElementById('show-sources').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.nutrient-checkbox:checked');
+            const resultsContent = document.getElementById('results-content');
+            const resultsDiv = document.getElementById('results');
+            
+            resultsContent.innerHTML = '';
+            
+            if (checkboxes.length === 0) {
+                resultsContent.innerHTML = '<p class="no-selection">Please select at least one nutrient to see its sources.</p>';
+                resultsDiv.style.display = 'block';
+                return;
+            }
+            
+            checkboxes.forEach(checkbox => {
+                const nutrientId = checkbox.id;
+                const nutrient = nutrientData[nutrientId];
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                
+                const nameElement = document.createElement('div');
+                nameElement.className = 'nutrient-name';
+                nameElement.textContent = nutrient.name;
+                
+                const requirementElement = document.createElement('div');
+                requirementElement.className = 'daily-requirement';
+                requirementElement.textContent = "Daily requirement: " + nutrient.daily_requirement;
+                
+                const sourcesElement = document.createElement('div');
+                sourcesElement.className = 'nutrient-sources';
+                
+                const sourcesList = nutrient.sources.map(source => {
+                    return `<div class="source-item">${source}</div>`;
+                }).join('');
+                
+                sourcesElement.innerHTML = sourcesList;
+                
+                resultItem.appendChild(nameElement);
+                resultItem.appendChild(requirementElement);
+                resultItem.appendChild(sourcesElement);
+                resultsContent.appendChild(resultItem);
+            });
+            
+            resultsDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
