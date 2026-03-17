@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-// ✅ Add water log for a user
+//  Add water log for a user
 router.post("/water-intake", (req, res) => {
   const { user_id, water_ml, date } = req.body;
 
   console.log("Received water log data:", { user_id, water_ml, date });
 
-  // ✅ Check for missing fields
+  //  Check for missing fields
   if (!user_id || !water_ml || !date) {
     return res.status(400).json({
       error: "Missing required fields: user_id, water_ml, or date"
@@ -26,7 +26,7 @@ router.post("/water-intake", (req, res) => {
   });
 });
 
-// ✅ Get past 7 days total per day for a specific user
+//  Get past 7 days total per day for a specific user
 router.get("/water-intake/:user_id", (req, res) => {
   const user_id = req.params.user_id;
 
