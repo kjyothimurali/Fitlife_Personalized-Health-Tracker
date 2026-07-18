@@ -16,9 +16,9 @@ app.use(express.json());
 // Database Connection Check
 db.connect((err) => {
     if (err) {
-        console.error("❌ Database connection failed:", err);
+        console.error("Database connection failed:", err);
     } else {
-        console.log("✅ Connected to MySQL database");
+        console.log("Connected to MySQL database");
     }
 });
 
@@ -32,7 +32,7 @@ app.use('/api',healthDataRoutes);
 
 // Default Route (For Testing)
 app.get('/', (req, res) => {
-    res.send('🚀 FitLife API is running...');
+    res.send('FitLife API is running...');
 });
 
 // Error Handling Middleware
