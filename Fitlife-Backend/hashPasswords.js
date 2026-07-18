@@ -15,14 +15,14 @@ async function hashPasswords() {
             if (!user.password_hash.startsWith("$2a$")) { // If not already hashed
                 const hashedPassword = await bcrypt.hash(user.password_hash, 10);
                 await db.query("UPDATE users SET password_hash = ? WHERE user_id = ?", [hashedPassword, user.user_id]);
-                console.log(`✅ Updated password for user ID: ${user.user_id}`);
+                console.log(`Updated password for user ID: ${user.user_id}`);
             }
         }
-        console.log("✅ Password hashing complete.");
+        console.log("Password hashing complete.");
     } catch (error) {
-        console.error("❌ Error updating passwords:", error);
+        console.error("Error updating passwords:", error);
     } finally {
-        process.exit(); // Exit after execution
+        process.exit(); 
     }
 }
 
