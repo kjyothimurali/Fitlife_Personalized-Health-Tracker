@@ -147,7 +147,7 @@
 
   // 🔹 Decode token to extract user_id
   const decoded = jwt_decode(data.token);
-const user_id = decoded.userId;  // ✅ fix the property name
+const user_id = decoded.userId;  
 localStorage.setItem("user_id", user_id);
 
   if (!user_id) {
